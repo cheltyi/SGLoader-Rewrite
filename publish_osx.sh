@@ -23,8 +23,8 @@ mkdir -p "bin/publish/macOS/Space Station 14 Launcher.app/Contents/MacOS/Marsey/
 mkdir -p "bin/publish/macOS/Space Station 14 Launcher.app/Contents/Resources/bin/loader/Space Station 14.app/Contents/Resources/bin/"
 
 cp -r Dependencies/dotnet/mac/* "bin/publish/macOS/Space Station 14 Launcher.app/Contents/Resources/dotnet/"
-cp -r SS14.Launcher/bin/Release/net9.0/osx-x64/publish/* "bin/publish/macOS/Space Station 14 Launcher.app/Contents/Resources/bin/"
-cp -r SS14.Loader/bin/Release/net9.0/osx-x64/publish/* "bin/publish/macOS/Space Station 14 Launcher.app/Contents/Resources/bin/loader/Space Station 14.app/Contents/Resources/bin/"
+cp -r SS14.Launcher/bin/Release/net10.0/osx-x64/publish/* "bin/publish/macOS/Space Station 14 Launcher.app/Contents/Resources/bin/"
+cp -r SS14.Loader/bin/Release/net10.0/osx-x64/publish/* "bin/publish/macOS/Space Station 14 Launcher.app/Contents/Resources/bin/loader/Space Station 14.app/Contents/Resources/bin/"
 pushd bin/publish/macOS
 zip -r ../../../SS14.Launcher_macOS.zip *
 popd

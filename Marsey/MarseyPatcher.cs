@@ -26,6 +26,8 @@ public class MarseyPatcher
 {
     private static MarseyPatcher? _instance;
     private static ManualResetEvent? _flag;
+    private static bool _patchingDisabled;
+    private static bool _enabled;
 
     public static MarseyPatcher Instance
     {
@@ -47,7 +49,10 @@ public class MarseyPatcher
         }
 
         _instance = new MarseyPatcher(robClientAssembly, mre);
+        _enabled = true;
     }
+
+    public static bool Enabled => _enabled;
 
     /// <exception cref="Exception">Excepts if Robust.Client assembly is null</exception>
     private MarseyPatcher(Assembly? robClientAssembly, ManualResetEvent mre)
@@ -62,6 +67,7 @@ public class MarseyPatcher
         // Initialize loader
         //Utility.SetupFlags();
         Utility.ReadConf();
+
         HarmonyManager.Init(new Harmony(MarseyVars.Identifier));
 
         MarseyLogger.Log(MarseyLogger.LogType.INFO, $"Marseyloader started{(MarseyConf.Patchless ? " in patchless mode" : "")}, version {MarseyVars.MarseyVersion}");
@@ -104,6 +110,9 @@ public class MarseyPatcher
     /// </summary>
     public void Boot()
     {
+        if (_patchingDisabled)
+            return;
+
         // Side-load custom code
         if (Subverse.CheckSubversions())
             Subverse.PatchSubverter();

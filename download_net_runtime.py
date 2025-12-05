@@ -12,12 +12,14 @@ PLATFORM_WINDOWS = "windows"
 PLATFORM_LINUX = "linux"
 PLATFORM_MACOS = "mac"
 
-DOTNET_RUNTIME_VERSION = "9.0.0"
+DOTNET_RUNTIME_VERSION = "10.0.0"
 
-DOTNET_RUNTIME_DOWNLOADS = {
-    PLATFORM_LINUX: "https://download.visualstudio.microsoft.com/download/pr/282bb881-c2ae-4250-b814-b362745073bd/6e15021d23f704c0d457c820a69a3de6/dotnet-runtime-9.0.0-linux-x64.tar.gz",
-    PLATFORM_WINDOWS: "https://download.visualstudio.microsoft.com/download/pr/fed1ee33-4574-4d89-85b5-3b8d7762b56a/432725cb9d6d235424768defea5ce6ee/dotnet-runtime-9.0.0-win-x64.zip",
-    PLATFORM_MACOS: "https://download.visualstudio.microsoft.com/download/pr/4be484a1-a095-48cf-8407-cae1d3dcc944/9f373dc1d85022e004df3ac1071ace59/dotnet-runtime-9.0.0-osx-x64.tar.gz"
+RUNTIME_BASE_URL = "https://dotnetcli.azureedge.net/dotnet/Runtime"
+
+PLATFORM_RIDS = {
+    PLATFORM_LINUX: ("linux-x64", "tar.gz"),
+    PLATFORM_WINDOWS: ("win-x64", "zip"),
+    PLATFORM_MACOS: ("osx-x64", "tar.gz"),
 }
 
 p = os.path.join
@@ -60,7 +62,7 @@ def update_netcore_runtime(platforms: List[str]) -> None:
 def download_platform_runtime(dir: str, platform: str) -> None:
     print(f"Downloading .NET Core Runtime for platform {platform}.")
     download_file = p(dir, "download.tmp")
-    download_url = DOTNET_RUNTIME_DOWNLOADS[platform]
+    download_url = runtime_download_url(platform)
     urllib.request.urlretrieve(download_url, download_file)
 
     if download_url.endswith(".tar.gz"):
@@ -72,6 +74,15 @@ def download_platform_runtime(dir: str, platform: str) -> None:
             zipF.extractall(dir)
 
     os.remove(download_file)
+
+
+def runtime_download_url(platform: str) -> str:
+    try:
+        rid, extension = PLATFORM_RIDS[platform]
+    except KeyError:
+        raise ValueError(f"Unsupported platform '{platform}'") from None
+
+    return f"{RUNTIME_BASE_URL}/{DOTNET_RUNTIME_VERSION}/dotnet-runtime-{DOTNET_RUNTIME_VERSION}-{rid}.{extension}"
 
 
 if __name__ == "__main__":

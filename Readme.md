@@ -18,3 +18,5 @@ Space Station 14 launcher with client-side modding/patching support.
 в отличии от стандартного marseyloader имеет брутфорс и епт поддержку дотнет10
 
 Установка для тупых: Распаковать релиз(!), не сурсы. Открыть Marseyloader.exe, патчи в Marsey/Mods. Патчи кодить самому либо у других просить, не ебу
+# психдиспансер им. опущенного хуесоса закурея
+<img width="1069" height="1132" alt="image" src="https://github.com/user-attachments/assets/fb24a7b3-312c-4ed7-8e84-309e5412f84f" />

@@ -21,3 +21,4 @@ Space Station 14 launcher with client-side modding/patching support.
 # психдиспансер им. опущенного хуесоса закурея
 <img width="1069" height="1132" alt="image" src="https://github.com/user-attachments/assets/fb24a7b3-312c-4ed7-8e84-309e5412f84f" />
 <img width="449" height="782" alt="image" src="https://github.com/user-attachments/assets/5d1cd98f-7836-4141-ad72-70306b6bc847" />
+<img width="489" height="386" alt="image" src="https://github.com/user-attachments/assets/98188168-695b-4628-be74-e180d6162b2e" />

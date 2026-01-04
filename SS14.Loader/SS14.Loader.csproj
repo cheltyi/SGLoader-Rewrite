@@ -26,6 +26,7 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="NSec.Cryptography" />
     <PackageReference Include="Robust.Natives" />
+    <PackageReference Include="Robust.Natives.SDL3" />
     <PackageReference Include="SharpZstd.Interop" />
     <PackageReference Include="Microsoft.NET.ILLink.Tasks" />
   </ItemGroup>

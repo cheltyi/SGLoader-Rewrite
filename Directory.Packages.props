@@ -16,6 +16,7 @@
     <PackageVersion Include="JetBrains.Annotations" Version="2025.2.4" />
     <!-- Loader -->
     <PackageVersion Include="Robust.Natives" Version="0.1.1" />
+    <PackageVersion Include="Robust.Natives.SDL3" Version="0.1.1-sdl3.2.20" />
     <!-- Launcher -->
     <PackageVersion Include="Avalonia" Version="11.0.6" />
     <PackageVersion Include="Avalonia.Desktop" Version="11.0.6" />

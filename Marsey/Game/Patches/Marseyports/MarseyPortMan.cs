@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Reflection;
 using HarmonyLib;
@@ -16,9 +17,30 @@ public static class MarseyPortMan
 {
     public static string fork = "";
     public static string engine = string.Empty;
+    private static Version? _engineVersion;
     private static IEnumerable<Type>? _backports;
 
-    public static void SetEngineVer(string eng) => engine = eng;
+    private static bool TryParseEngineVersion(string? eng, out Version version)
+    {
+        version = default!;
+        if (string.IsNullOrWhiteSpace(eng)) return false;
+
+        string value = eng.Trim();
+        if (value.StartsWith("v", StringComparison.OrdinalIgnoreCase))
+            value = value.Substring(1);
+
+        int splitIndex = value.IndexOfAny(new[] { '-', '+' });
+        if (splitIndex >= 0)
+            value = value.Substring(0, splitIndex);
+
+        return Version.TryParse(value, out version);
+    }
+
+    public static void SetEngineVer(string eng)
+    {
+        engine = eng ?? string.Empty;
+        _engineVersion = TryParseEngineVersion(engine, out Version v) ? v : null;
+    }
     public static void SetForkID(string forkid) => fork = forkid;
 
     public static void Initialize()
@@ -53,14 +75,16 @@ public static class MarseyPortMan
         BackportTargetEngineBefore? BTEB = backport.GetCustomAttribute<BackportTargetEngineBefore>();
         BackportTargetEngineAny? BTEAny = backport.GetCustomAttribute<BackportTargetEngineAny>();
 
+        Version? engineVersion = _engineVersion;
+
         // Discard if fork id is set and does not match
         if (BTF != null && BTF.ForkID != fork) return false;
         // Discard if target engine is set and does not match
-        if (BTE != null && BTE.Ver.CompareTo(engine) != 0) return false;
+        if (BTE != null && (engineVersion == null || BTE.Ver.CompareTo(engineVersion) != 0)) return false;
         // Discard if target engine after is set and version is below
-        if (BTEAf != null && BTEAf.Ver.CompareTo(engine) > 0) return false;
+        if (BTEAf != null && (engineVersion == null || BTEAf.Ver.CompareTo(engineVersion) > 0)) return false;
         // Discard if target engine before is set and version is above
-        if (BTEB != null && BTEB.Ver.CompareTo(engine) < 0) return false;
+        if (BTEB != null && (engineVersion == null || BTEB.Ver.CompareTo(engineVersion) < 0)) return false;
         // Discard if any engine is targeted, but backports of this type are disabled
         if (BTEAny != null && MarseyConf.DisableAnyBackports) return false;
 

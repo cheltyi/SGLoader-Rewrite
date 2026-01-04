@@ -104,7 +104,25 @@ public static async Task PrepareMods(string[]? path = null)
         IPC.Client client = new();
         string data = client.ConnRecv(name);
 
-        return string.IsNullOrEmpty(data) ? new List<string>() : data.Split(',').ToList();
+        if (string.IsNullOrEmpty(data))
+            return new List<string>();
+
+        return data
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(PercentDecode)
+            .ToList();
+    }
+
+    private static string PercentDecode(string s)
+    {
+        try
+        {
+            return Uri.UnescapeDataString(s);
+        }
+        catch
+        {
+            return s;
+        }
     }
 
 

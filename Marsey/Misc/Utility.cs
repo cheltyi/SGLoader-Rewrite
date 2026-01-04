@@ -78,9 +78,15 @@ public abstract class Utility
         IPC.Client MarseyConfPipeClient = new();
         string config = MarseyConfPipeClient.ConnRecv("MarseyConf");
 
-        Dictionary<string, string> envVars = config.Split(';')
-            .Select(kv => kv.Split('='))
-            .ToDictionary(kv => kv[0], kv => kv[1]);
+        Dictionary<string, string> envVars = new();
+        foreach (string seg in config.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        {
+            string[] parts = seg.Split('=', 2);
+            if (parts.Length != 2 || string.IsNullOrEmpty(parts[0]))
+                continue;
+
+            envVars[parts[0]] = PercentDecode(parts[1]);
+        }
 
         // Apply the environment variables to MarseyConf
         foreach (KeyValuePair<string, string> kv in envVars)
@@ -89,6 +95,18 @@ public abstract class Utility
 
             MarseyLogger.Log(MarseyLogger.LogType.DEBG, $"{kv.Key} read {kv.Value}");
             value(kv.Value);
+        }
+    }
+
+    private static string PercentDecode(string s)
+    {
+        try
+        {
+            return Uri.UnescapeDataString(s);
+        }
+        catch
+        {
+            return s;
         }
     }
 }

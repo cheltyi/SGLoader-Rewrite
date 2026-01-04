@@ -21,6 +21,7 @@ internal class Program
     private const string RobustAssemblyName = "Robust.Client";
 
     private readonly IFileApi _fileApi;
+    private readonly string? _prefix;
 
     private Program(string robustPath, string[] engineArgs)
     {
@@ -32,11 +33,13 @@ internal class Program
         AssemblyLoadContext.Default.Resolving += LoadContextOnResolving;
         AssemblyLoadContext.Default.ResolvingUnmanagedDll += LoadContextOnResolvingUnmanaged;
 
-        var prefix = "";
+        var prefix = (string?)null;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
             prefix = "Space Station 14.app/Contents/Resources/";
         }
+
+        _prefix = prefix;
 
         _fileApi = new ZipFileApi(zipArchive, prefix);
     }
@@ -84,13 +87,33 @@ internal class Program
 
         var launcher = Environment.GetEnvironmentVariable("SS14_LAUNCHER_PATH");
         var redialApi = launcher != null ? new RedialApi(launcher) : null;
+        var overlayZip = Environment.GetEnvironmentVariable("SS14_LOADER_OVERLAY_ZIP");
+        ZipArchive? overlayArchive = null;
+        ZipFileApi? overlayApi = null;
+
         var contentDb = Environment.GetEnvironmentVariable("SS14_LOADER_CONTENT_DB");
         var contentVersion = Environment.GetEnvironmentVariable("SS14_LOADER_CONTENT_VERSION");
         ContentDbFileApi? contentApi = null;
-        IEnumerable<ApiMount>? extraMounts = null;
-        if (!string.IsNullOrEmpty(contentDb) && !string.IsNullOrEmpty(contentVersion))
+
+        // Preferred path for SGLoader: provide content as a zip overlay (server client.zip).
+        // This makes Content.* assemblies/resources available to the engine.
+        if (!string.IsNullOrEmpty(overlayZip) && File.Exists(overlayZip))
+        {
+            overlayArchive = new ZipArchive(File.OpenRead(overlayZip), ZipArchiveMode.Read);
+            overlayApi = new ZipFileApi(overlayArchive, _prefix);
+        }
+        else if (!string.IsNullOrEmpty(contentDb) && !string.IsNullOrEmpty(contentVersion))
         {
             contentApi = new ContentDbFileApi(contentDb, long.Parse(contentVersion));
+        }
+
+        IEnumerable<ApiMount>? extraMounts = null;
+        if (overlayApi != null)
+        {
+            extraMounts = new[] { new ApiMount(overlayApi, "/") };
+        }
+        else if (contentApi != null)
+        {
             extraMounts = new[] { new ApiMount(contentApi, "/") };
         }
 
@@ -103,6 +126,7 @@ internal class Program
         finally
         {
             contentApi?.Dispose();
+            overlayArchive?.Dispose();
         }
         return true;
     }

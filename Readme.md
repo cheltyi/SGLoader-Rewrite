@@ -7,7 +7,7 @@
 
 ![# Marseyloader](SS14.Launcher/Assets/logo-long.png)
 
-Space Station 14 launcher with client-side modding/patching support.
+Space Station 14 launcher with client-side modding/patching support. [Discord support](https://discord.gg/N6sJhF7tuv)
 
 ![# badge](Assets/README/no-stops-no-regrets.svg)
 ![# badge](Assets/README/ensuring-code-integrity.svg)

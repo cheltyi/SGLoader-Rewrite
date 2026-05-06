@@ -56,6 +56,12 @@ public class ToolsTabViewModel : MainWindowTabViewModel
         set => this.RaiseAndSetIfChanged(ref _foundPassword, value);
     }
 
+    public string OutputPath
+    {
+        get => _outputPath;
+        set => this.RaiseAndSetIfChanged(ref _outputPath, value);
+    }
+
     private System.Timers.Timer? _ppsTimer;
     private readonly List<DateTime> _attemptTimestamps = new();
     private DateTime _bruteStartTime;

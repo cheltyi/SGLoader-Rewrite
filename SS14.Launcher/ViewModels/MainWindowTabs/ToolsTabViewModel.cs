@@ -101,7 +101,7 @@ public class ToolsTabViewModel : MainWindowTabViewModel
         PasswordsPerMinute = 0.0;
     }
 
-    public string CKeyPath { get; set; } = "";
+    public string cKeyPath { get; set; } = "";
     public string passwordsPath { get; set; } = "";
 
     public override string Name => "Tools";

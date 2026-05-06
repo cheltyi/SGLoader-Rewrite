@@ -3,20 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{15FE716D-0987-4F2F-8354-2D9CCAAC7B98}|SS14.Launcher\\SS14.Launcher.csproj|c:\\users\\justk\\onedrive\\desktop\\\u043D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\sgloader_with_ckey_sequence\\ss14.launcher\\views\\mainwindowtabs\\toolstabview.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{15FE716D-0987-4F2F-8354-2D9CCAAC7B98}|SS14.Launcher\\SS14.Launcher.csproj|solutionrelative:ss14.launcher\\views\\mainwindowtabs\\toolstabview.xaml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{15FE716D-0987-4F2F-8354-2D9CCAAC7B98}|SS14.Launcher\\SS14.Launcher.csproj|c:\\users\\justk\\onedrive\\desktop\\\u043D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\sgloader_with_ckey_sequence\\ss14.launcher\\viewmodels\\mainwindowtabs\\toolstabviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{15FE716D-0987-4F2F-8354-2D9CCAAC7B98}|SS14.Launcher\\SS14.Launcher.csproj|solutionrelative:ss14.launcher\\viewmodels\\mainwindowtabs\\toolstabviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|c:\\users\\justk\\onedrive\\desktop\\\u043D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\sgloader_with_ckey_sequence\\ss14.launcher\\utility\\sqliteblobstream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|solutionrelative:ss14.launcher\\utility\\sqliteblobstream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|c:\\users\\justk\\onedrive\\desktop\\\u043D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\sgloader_with_ckey_sequence\\ss14.launcher\\utility\\zstd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|solutionrelative:ss14.launcher\\utility\\zstd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|c:\\users\\justk\\onedrive\\desktop\\\u043D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\sgloader_with_ckey_sequence\\ss14.launcher\\utility\\sqliteblobstream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|solutionrelative:ss14.launcher\\utility\\sqliteblobstream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4480C40E-ABCE-4012-8481-021A9ACCF9BB}|SS14.Loader\\SS14.Loader.csproj|c:\\users\\justk\\onedrive\\desktop\\\u043D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\sgloader_with_ckey_sequence\\ss14.loader\\zipfileapi.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -35,32 +31,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ToolsTabView.xaml",
-              "DocumentMoniker": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
-              "RelativeDocumentMoniker": "SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
-              "ToolTip": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
-              "RelativeToolTip": "SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-06T06:48:38.821Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "ToolsTabViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
               "RelativeDocumentMoniker": "SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
               "ToolTip": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
               "RelativeToolTip": "SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAA2wGcAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAswOoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T05:35:38.918Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "ZStd.cs",
               "DocumentMoniker": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\Utility\\ZStd.cs",
               "RelativeDocumentMoniker": "SS14.Launcher\\Utility\\ZStd.cs",
@@ -86,7 +69,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "ZipFileApi.cs",
               "DocumentMoniker": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Loader\\ZipFileApi.cs",
               "RelativeDocumentMoniker": "SS14.Loader\\ZipFileApi.cs",
@@ -94,7 +77,8 @@
               "RelativeToolTip": "SS14.Loader\\ZipFileApi.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T05:30:46.081Z"
+              "WhenOpened": "2026-05-06T05:30:46.081Z",
+              "EditorCaption": ""
             }
           ]
         }

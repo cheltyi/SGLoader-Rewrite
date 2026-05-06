@@ -18,7 +18,7 @@
              Text="{Binding passwordsPath, Mode=TwoWay}"/>
 
     <TextBox DockPanel.Dock="Top" Name="OutputPath" MaxWidth="250" Margin="0, 4, 0, 0" Watermark="Path to dict"
-         Text="{Binding outputPath, Mode=TwoWay}"/>
+         Text="{Binding OutputPath, Mode=TwoWay}"/>
     
     <TextBlock DockPanel.Dock="Top" Margin="0, 10, 0, 0" FontWeight="Bold" FontSize="16"
                Text="{Binding PasswordsPerMinute, StringFormat='PPM: {0:F2}'}"/>

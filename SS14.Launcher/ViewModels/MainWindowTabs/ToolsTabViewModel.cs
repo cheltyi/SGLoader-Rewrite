@@ -48,7 +48,7 @@ public class ToolsTabViewModel : MainWindowTabViewModel
 
     private string _foundPassword = "";
 
-    private string outputPath = "";
+    private string _outputPath = "";
 
     public string FoundPassword
     {
@@ -197,7 +197,7 @@ public class ToolsTabViewModel : MainWindowTabViewModel
                                         found = true;
                                         FoundPassword = localPwd;
 
-                                        using (StreamWriter writer = new StreamWriter(outputPath))
+                                        using (StreamWriter writer = new StreamWriter(_outputPath, append: true))
                                         {
                                             writer.WriteLine(cKey + " : " + localPwd);
                                             _cancelSource?.Cancel();

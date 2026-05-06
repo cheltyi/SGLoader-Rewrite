@@ -48,7 +48,7 @@ public class ToolsTabViewModel : MainWindowTabViewModel
 
     private string _foundPassword = "";
 
-    private string outputPath = "./ppsoutput.txt";
+    private string outputPath = "";
 
     public string FoundPassword
     {

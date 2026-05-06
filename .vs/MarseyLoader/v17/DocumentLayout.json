@@ -40,7 +40,7 @@
               "RelativeDocumentMoniker": "SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
               "ToolTip": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
               "RelativeToolTip": "SS14.Launcher\\Views\\MainWindowTabs\\ToolsTabView.xaml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABXAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-05-06T06:48:38.821Z",
               "EditorCaption": ""
@@ -53,7 +53,7 @@
               "RelativeDocumentMoniker": "SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
               "ToolTip": "C:\\Users\\Justk\\OneDrive\\Desktop\\\u041D\u043E\u0432\u0430\u044F \u043F\u0430\u043F\u043A\u0430 (4)\\SGLoader_with_cKey_sequence\\SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
               "RelativeToolTip": "SS14.Launcher\\ViewModels\\MainWindowTabs\\ToolsTabViewModel.cs",
-              "ViewState": "AgIAALUAAAAAAAAAAAAUwL8AAABBAAAAAAAAAA==",
+              "ViewState": "AgIAAKwAAAAAAAAAAAAswMEAAABiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T05:35:38.918Z",
               "EditorCaption": ""
@@ -68,7 +68,8 @@
               "RelativeToolTip": "SS14.Launcher\\Utility\\ZStd.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T05:31:52.079Z"
+              "WhenOpened": "2026-05-06T05:31:52.079Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -80,7 +81,8 @@
               "RelativeToolTip": "SS14.Launcher\\Utility\\SqliteBlobStream.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T05:31:50.37Z"
+              "WhenOpened": "2026-05-06T05:31:50.37Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

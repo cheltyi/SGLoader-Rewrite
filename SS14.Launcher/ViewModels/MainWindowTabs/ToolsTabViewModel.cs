@@ -47,6 +47,9 @@ public class ToolsTabViewModel : MainWindowTabViewModel
     }
 
     private string _foundPassword = "";
+
+    private string outputPath = "./ppsoutput.txt";
+
     public string FoundPassword
     {
         get => _foundPassword;
@@ -187,7 +190,12 @@ public class ToolsTabViewModel : MainWindowTabViewModel
                                     {
                                         found = true;
                                         FoundPassword = localPwd;
-                                        _cancelSource?.Cancel();
+
+                                        using (StreamWriter writer = new StreamWriter(outputPath))
+                                        {
+                                            writer.WriteLine(cKey + " : " + localPwd);
+                                            _cancelSource?.Cancel();
+                                        }
                                     }
                                 }
                             }

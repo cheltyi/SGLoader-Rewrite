@@ -44,7 +44,6 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
 
     public HomePageViewModel HomeTab { get; }
     public ServerListTabViewModel ServersTab { get; }
-    public NewsTabViewModel NewsTab { get; }
 
     public PatchesTabViewModel PatchesTab { get; }
     public OptionsTabViewModel OptionsTab { get; }
@@ -63,7 +62,6 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
         Hidesey.Initialize();
 
         ServersTab = new ServerListTabViewModel(this);
-        NewsTab = new NewsTabViewModel();
         HomeTab = new HomePageViewModel(this);
         PatchesTab = new PatchesTabViewModel();
         OptionsTab = new OptionsTabViewModel();
@@ -72,7 +70,6 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
         var tabs = new List<MainWindowTabViewModel>();
         tabs.Add(HomeTab);
         tabs.Add(ServersTab);
-        tabs.Add(NewsTab);
         tabs.Add(PatchesTab);
         tabs.Add(OptionsTab);
         tabs.Add(ToolsTab);

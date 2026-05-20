@@ -224,14 +224,14 @@ public static class CVars
     // API
 
     /// <summary>
-    /// Enable MarseyApi
+    /// Enable MarseyApi. Off by default - opt-in only, no endpoint is shipped.
     /// </summary>
-    public static readonly CVarDef<bool> MarseyApi = CVarDef.Create("MarseyApi", true);
+    public static readonly CVarDef<bool> MarseyApi = CVarDef.Create("MarseyApi", false);
 
     /// <summary>
-    /// MarseyApi endpoint url
+    /// MarseyApi endpoint url. Empty by default - the user must provide their own.
     /// </summary>
-    public static readonly CVarDef<string> MarseyApiEndpoint = CVarDef.Create("MarseyApiEndpoint", "https://fujo.love/api/v1");
+    public static readonly CVarDef<string> MarseyApiEndpoint = CVarDef.Create("MarseyApiEndpoint", "");
 
     /// <summary>
     /// Ignore "Marsey-M" (required updates) releases

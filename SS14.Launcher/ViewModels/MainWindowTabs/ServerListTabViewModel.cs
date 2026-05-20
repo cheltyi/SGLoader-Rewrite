@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using Avalonia.Threading;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Splat;
@@ -12,10 +14,23 @@ namespace SS14.Launcher.ViewModels.MainWindowTabs;
 
 public class ServerListTabViewModel : MainWindowTabViewModel
 {
+    /// <summary>
+    /// How long to wait after the last keystroke before re-filtering the server list.
+    /// Re-filtering a large hub is expensive, so we don't do it on every keystroke.
+    /// </summary>
+    private static readonly TimeSpan SearchDebounceDelay = TimeSpan.FromMilliseconds(200);
+
     private readonly MainWindowViewModel _windowVm;
     private readonly ServerListCache _serverListCache;
 
-    public ObservableCollection<ServerEntryViewModel> SearchedServers { get; } = new();
+    // View-models are reused across rebuilds: changing the search string or filters does not
+    // re-allocate (and re-subscribe the events of) a view-model for every server, it just
+    // re-filters the ones we already have. Cleared on refresh, when the cache hands us new data.
+    private readonly Dictionary<ServerStatusData, ServerEntryViewModel> _entryVms = new();
+
+    private readonly DispatcherTimer _searchDebounceTimer;
+
+    public ServerEntryList SearchedServers { get; } = new();
 
     private string? _searchString;
 
@@ -27,7 +42,9 @@ public class ServerListTabViewModel : MainWindowTabViewModel
         set
         {
             this.RaiseAndSetIfChanged(ref _searchString, value);
-            UpdateSearchedList();
+            // Debounce: don't rebuild the list while the user is still typing.
+            _searchDebounceTimer.Stop();
+            _searchDebounceTimer.Start();
         }
     }
 
@@ -77,6 +94,9 @@ public class ServerListTabViewModel : MainWindowTabViewModel
         _windowVm = windowVm;
         _serverListCache = Locator.Current.GetRequiredService<ServerListCache>();
 
+        _searchDebounceTimer = new DispatcherTimer { Interval = SearchDebounceDelay };
+        _searchDebounceTimer.Tick += (_, _) => UpdateSearchedList();
+
         _serverListCache.AllServers.CollectionChanged += ServerListUpdated;
 
         _serverListCache.PropertyChanged += (_, args) =>
@@ -109,6 +129,10 @@ public class ServerListTabViewModel : MainWindowTabViewModel
 
     private void ServerListUpdated(object? sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
     {
+        // The cache swapped in fresh server objects (a refresh happened); the cached
+        // view-models point at stale data, so drop them and let UpdateSearchedList rebuild.
+        _entryVms.Clear();
+
         Filters.UpdatePresentFilters(_serverListCache.AllServers);
 
         UpdateSearchedList();
@@ -116,6 +140,9 @@ public class ServerListTabViewModel : MainWindowTabViewModel
 
     private void UpdateSearchedList()
     {
+        // Any pending debounced update is now satisfied by this run.
+        _searchDebounceTimer.Stop();
+
         var sortList = new List<ServerStatusData>();
 
         foreach (var server in _serverListCache.AllServers)
@@ -130,12 +157,21 @@ public class ServerListTabViewModel : MainWindowTabViewModel
 
         sortList.Sort(ServerSortComparer.Instance);
 
-        SearchedServers.Clear();
+        var entryVms = new List<ServerEntryViewModel>(sortList.Count);
         foreach (var server in sortList)
         {
-            var vm = new ServerEntryViewModel(_windowVm, server, _serverListCache, _windowVm.Cfg);
-            SearchedServers.Add(vm);
+            if (!_entryVms.TryGetValue(server, out var vm))
+            {
+                vm = new ServerEntryViewModel(_windowVm, server, _serverListCache, _windowVm.Cfg);
+                _entryVms.Add(server, vm);
+            }
+
+            entryVms.Add(vm);
         }
+
+        // Swap the whole list in one shot. Clearing and re-adding item by item fired a
+        // collection-changed event per server, which froze the UI on large hubs.
+        SearchedServers.Replace(entryVms);
     }
 
     private bool DoesSearchMatch(ServerStatusData data)
@@ -165,6 +201,24 @@ public class ServerListTabViewModel : MainWindowTabViewModel
 
             // Sort by address.
             return string.Compare(x.Address, y.Address, StringComparison.Ordinal);
+        }
+    }
+
+    /// <summary>
+    /// An <see cref="ObservableCollection{T}"/> that can swap its entire contents with a single
+    /// reset notification, instead of one notification per item added or removed.
+    /// </summary>
+    public sealed class ServerEntryList : ObservableCollection<ServerEntryViewModel>
+    {
+        public void Replace(IReadOnlyList<ServerEntryViewModel> newItems)
+        {
+            Items.Clear();
+            foreach (var item in newItems)
+                Items.Add(item);
+
+            OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+            OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
         }
     }
 }

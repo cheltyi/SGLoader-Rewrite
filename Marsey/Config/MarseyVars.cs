@@ -15,11 +15,6 @@ public static class MarseyVars
     public static readonly string EnabledPatchListFileName = "patches.marsey";
 
     /// <summary>
-    /// Default MarseyAPI endpoint url
-    /// </summary>
-    public static readonly string MarseyApiEndpoint = "https://fujo.love/api/v1";
-
-    /// <summary>
     /// Namespace identifier for Harmony
     /// </summary>
     public static readonly string Identifier = "com.validhunters.marseyloader";

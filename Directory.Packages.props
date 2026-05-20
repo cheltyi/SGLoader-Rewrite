@@ -23,7 +23,6 @@
     <PackageVersion Include="Avalonia.ReactiveUI" Version="11.0.6" />
     <PackageVersion Include="Avalonia.Diagnostics" Version="11.0.6" />
     <PackageVersion Include="Avalonia.Themes.Simple" Version="11.0.6" />
-    <PackageVersion Include="CodeHollow.FeedReader" Version="1.2.6" />
     <PackageVersion Include="Dapper" Version="2.1.35" />
     <PackageVersion Include="DynamicData" Version="8.4.1" />
     <PackageVersion Include="Microsoft.Toolkit.Mvvm" Version="7.1.2" />

@@ -50,7 +50,15 @@
           </Panel.Background>
           <ScrollViewer MinHeight="150" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible">
             <Grid RowDefinitions="Auto,Auto,Auto">
-              <ItemsControl Grid.Row="0" ItemsSource="{Binding SearchedServers}" Classes="ServerList" />
+              <!-- VirtualizingStackPanel: only realize the visible rows so large hubs
+                   (hundreds of servers) don't build hundreds of controls at once. -->
+              <ItemsControl Grid.Row="0" ItemsSource="{Binding SearchedServers}" Classes="ServerList">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                  </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+              </ItemsControl>
               <TextBlock Grid.Row="1" IsVisible="{Binding ListTextVisible}" TextAlignment="Center" VerticalAlignment="Center"
                          Text="{Binding ListText}" />
               <Viewbox Grid.Row="2" IsVisible="{Binding SpinnerVisible}" Classes="DungSpinnerBox">

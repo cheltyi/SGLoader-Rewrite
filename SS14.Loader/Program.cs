@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Loader;
@@ -28,7 +27,6 @@ internal class Program
         CheckDebugger();
 
         _engineArgs = engineArgs;
-        var zipArchive = new ZipArchive(File.OpenRead(robustPath), ZipArchiveMode.Read);
 
         AssemblyLoadContext.Default.Resolving += LoadContextOnResolving;
         AssemblyLoadContext.Default.ResolvingUnmanagedDll += LoadContextOnResolvingUnmanaged;
@@ -41,7 +39,7 @@ internal class Program
 
         _prefix = prefix;
 
-        _fileApi = new ZipFileApi(zipArchive, prefix);
+        _fileApi = new ZipFileApi(robustPath, prefix);
     }
 
     private void CheckDebugger()
@@ -88,7 +86,6 @@ internal class Program
         var launcher = Environment.GetEnvironmentVariable("SS14_LAUNCHER_PATH");
         var redialApi = launcher != null ? new RedialApi(launcher) : null;
         var overlayZip = Environment.GetEnvironmentVariable("SS14_LOADER_OVERLAY_ZIP");
-        ZipArchive? overlayArchive = null;
         ZipFileApi? overlayApi = null;
 
         var contentDb = Environment.GetEnvironmentVariable("SS14_LOADER_CONTENT_DB");
@@ -99,8 +96,7 @@ internal class Program
         // This makes Content.* assemblies/resources available to the engine.
         if (!string.IsNullOrEmpty(overlayZip) && File.Exists(overlayZip))
         {
-            overlayArchive = new ZipArchive(File.OpenRead(overlayZip), ZipArchiveMode.Read);
-            overlayApi = new ZipFileApi(overlayArchive, _prefix);
+            overlayApi = new ZipFileApi(overlayZip, _prefix);
         }
         else if (!string.IsNullOrEmpty(contentDb) && !string.IsNullOrEmpty(contentVersion))
         {
@@ -126,7 +122,7 @@ internal class Program
         finally
         {
             contentApi?.Dispose();
-            overlayArchive?.Dispose();
+            overlayApi?.Dispose();
         }
         return true;
     }

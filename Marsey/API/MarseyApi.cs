@@ -17,7 +17,11 @@ namespace Marsey.API
 
         public static async Task Initialize(string endpoint, bool enabled)
         {
-            if (!enabled) return;
+            if (!enabled || string.IsNullOrWhiteSpace(endpoint))
+            {
+                _enabled = false;
+                return;
+            }
 
             if (await MarseyHello(endpoint))
             {

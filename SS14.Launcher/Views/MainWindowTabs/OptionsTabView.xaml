@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <mainWindowTabs:HideLevelDescriptionConverter x:Key="HideLevelDescriptionConverter" />
+        <mainWindowTabs:PatchSafetyLevelDescriptionConverter x:Key="PatchSafetyLevelDescriptionConverter" />
     </UserControl.Resources>
 
   <TabControl>
@@ -76,6 +77,31 @@
                 </ComboBox.ItemTemplate>
               </ComboBox>
               <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding HideLevel, Converter={StaticResource HideLevelDescriptionConverter}}" Margin="8" />
+            </Grid>
+
+            <TextBlock Margin="4, 0" Text="Patch Safety Level" Classes="NanoHeadingMedium" />
+            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="*, Auto">
+              <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" TextWrapping="Wrap" Margin="8">Controls which patches are allowed to run, based on the safety catalog.</TextBlock>
+              <ComboBox Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="4" ItemsSource="{Binding PatchSafetyLevels}" SelectedItem="{Binding PatchSafetyLevel}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+              <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" TextWrapping="Wrap" Text="{Binding PatchSafetyLevel, Converter={StaticResource PatchSafetyLevelDescriptionConverter}}" Margin="8" />
+            </Grid>
+
+            <TextBlock Margin="4, 0" Text="Patch List URLs" Classes="NanoHeadingMedium" />
+            <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Margin="8"
+                       Text="URLs of the approved (validated) and blocked (rejected) patch hash lists. GitHub web links are converted to raw automatically." />
+            <Grid RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, *">
+              <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="8,4" Text="Approved:" />
+              <TextBox Grid.Row="0" Grid.Column="1" Margin="4" Text="{Binding PatchValidatedUrl, Mode=TwoWay}" />
+              <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="8,4" Text="Blocked:" />
+              <TextBox Grid.Row="1" Grid.Column="1" Margin="4" Text="{Binding PatchRejectedUrl, Mode=TwoWay}" />
+              <Button Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" Margin="4"
+                      Content="Save patch list URLs" Command="{Binding SavePatchUrlsCommand}" />
             </Grid>
 
             <TextBlock Margin="4, 0" Text="Launcher Behavior" Classes="NanoHeadingMedium" />

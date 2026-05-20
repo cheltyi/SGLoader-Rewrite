@@ -4,6 +4,7 @@ using Marsey.Game.Misc;
 using Marsey.Handbreak;
 using Marsey.Misc;
 using Marsey.PatchAssembly;
+using Marsey.Safety;
 using Marsey.Stealthsey;
 using Marsey.Stealthsey.Reflection;
 
@@ -23,6 +24,9 @@ public static class Subverse
     public static bool CheckSubversions()
     {
         _subverters = FileHandler.GetFilesFromPipe("SubverterPatchesPipe");
+
+        // Safety gate: terminate before loading anything the safety level forbids
+        SafetyGate.EnforceFiles(_subverters);
 
         return _subverters.Count != 0;
     }

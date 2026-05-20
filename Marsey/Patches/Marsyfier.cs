@@ -1,6 +1,7 @@
 ﻿using Marsey.Game;
 using Marsey.Misc;
 using Marsey.PatchAssembly;
+using Marsey.Safety;
 
 namespace Marsey.Patches;
 
@@ -19,6 +20,9 @@ public static class Marsyfier
         List<string> preloads = FileHandler.GetFilesFromPipe("PreloadMarseyPatchesPipe");
 
         if (preloads.Count == 0) return;
+
+        // Safety gate: terminate before loading anything the safety level forbids
+        SafetyGate.EnforceFiles(preloads);
 
         MarseyLogger.Log(MarseyLogger.LogType.INFO, "Preloader", $"Preloading {preloads.Count} patches.");
 

@@ -16,6 +16,7 @@ using Marsey;
 using Marsey.Config;
 using Marsey.Game.Patches;
 using Marsey.Misc;
+using Marsey.Safety;
 using Marsey.Stealthsey;
 using Microsoft.Toolkit.Mvvm.Input;
 using Serilog;
@@ -44,7 +45,9 @@ public class OptionsTabViewModel : MainWindowTabViewModel, INotifyPropertyChange
     public ICommand SetRPCUsernameCommand { get; }
     public ICommand SetGuestUsernameCommand { get; }
     public ICommand SetEndpointCommand { get; }
+    public ICommand SavePatchUrlsCommand { get; }
     public IEnumerable<HideLevel> HideLevels { get; } = Enum.GetValues(typeof(HideLevel)).Cast<HideLevel>();
+    public IEnumerable<PatchSafetyLevel> PatchSafetyLevels { get; } = Enum.GetValues(typeof(PatchSafetyLevel)).Cast<PatchSafetyLevel>();
 
 
     public OptionsTabViewModel()
@@ -61,7 +64,11 @@ public class OptionsTabViewModel : MainWindowTabViewModel, INotifyPropertyChange
         SetUsernameCommand = new RelayCommand(OnSetUsernameClick);
         SetGuestUsernameCommand = new RelayCommand(OnSetGuestUsernameClick);
         SetEndpointCommand = new RelayCommand(OnSetEndpointClick);
+        SavePatchUrlsCommand = new RelayCommand(OnSavePatchUrlsClick);
         DumpConfigCommand = new RelayCommand(DumpConfig.Dump);
+
+        _patchValidatedUrl = Cfg.GetCVar(CVars.PatchValidatedUrl);
+        _patchRejectedUrl = Cfg.GetCVar(CVars.PatchRejectedUrl);
 
         Persist.UpdateLauncherConfig();
         SetTempHwid();
@@ -201,6 +208,43 @@ public class OptionsTabViewModel : MainWindowTabViewModel, INotifyPropertyChange
             OnPropertyChanged(nameof(HideLevel));
             Cfg.CommitConfig();
         }
+    }
+
+    public PatchSafetyLevel PatchSafetyLevel
+    {
+        get => (PatchSafetyLevel)Cfg.GetCVar(CVars.PatchSafetyLevel);
+        set
+        {
+            Cfg.SetCVar(CVars.PatchSafetyLevel, (int)value);
+            MarseyConf.PatchSafety = value;
+            OnPropertyChanged(nameof(PatchSafetyLevel));
+            Cfg.CommitConfig();
+        }
+    }
+
+    // Edits are stashed and only written when SavePatchUrlsCommand runs, to avoid
+    // committing the config on every keystroke.
+    private string _patchValidatedUrl = "";
+    public string PatchValidatedUrl
+    {
+        get => Cfg.GetCVar(CVars.PatchValidatedUrl);
+        set => _patchValidatedUrl = value;
+    }
+
+    private string _patchRejectedUrl = "";
+    public string PatchRejectedUrl
+    {
+        get => Cfg.GetCVar(CVars.PatchRejectedUrl);
+        set => _patchRejectedUrl = value;
+    }
+
+    private void OnSavePatchUrlsClick()
+    {
+        Cfg.SetCVar(CVars.PatchValidatedUrl, _patchValidatedUrl.Trim());
+        Cfg.SetCVar(CVars.PatchRejectedUrl, _patchRejectedUrl.Trim());
+        Cfg.CommitConfig();
+        OnPropertyChanged(nameof(PatchValidatedUrl));
+        OnPropertyChanged(nameof(PatchRejectedUrl));
     }
 
     public bool DisableSigning
@@ -601,6 +645,25 @@ public class HideLevelDescriptionConverter : IValueConverter
             HideLevel.Explicit => "Patcher and patches are hidden. Separate patch logging is disabled.",
             HideLevel.Unconditional => "Patcher, patches are hidden. Separate patch logging, Subversion is disabled.",
             _ => "Unknown hide level."
+        };
+    }
+
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return value;
+    }
+}
+
+public class PatchSafetyLevelDescriptionConverter : IValueConverter
+{
+    public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+    {
+        return (PatchSafetyLevel)(value ?? PatchSafetyLevel.Warn) switch
+        {
+            PatchSafetyLevel.Block => "Blocks every patch that is not approved (green checkmark). Unknown and rejected patches cannot be enabled. With no repository configured, all patches are blocked.",
+            PatchSafetyLevel.Warn => "Blocks only rejected (red cross) patches. Approved and unknown patches can be enabled.",
+            PatchSafetyLevel.Pass => "All patches can be enabled regardless of their safety status.",
+            _ => "Unknown patch safety level."
         };
     }
 

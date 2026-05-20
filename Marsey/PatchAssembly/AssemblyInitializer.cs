@@ -1,5 +1,6 @@
 using System.Reflection;
 using Marsey.Patches;
+using Marsey.Safety;
 using Marsey.Stealthsey;
 using Marsey.Subversion;
 using Marsey.Misc;
@@ -106,6 +107,7 @@ public static class AssemblyInitializer
         Hidesey.HidePatch(assembly); // Conceal assembly from the game
 
         IPatch patch = createPatch(assembly, path, name, description, preloadField);
+        patch.Hash = PatchAssessor.ComputeHash(path); // Used to check the patch against the safety catalog
         PatchListManager.AddPatchToList(patch);
     }
 }

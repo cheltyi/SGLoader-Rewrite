@@ -1,5 +1,6 @@
 using System.Reflection;
 using Newtonsoft.Json;
+using Marsey.Safety;
 
 namespace Marsey.Patches;
 
@@ -11,4 +12,8 @@ public interface IPatch
     [JsonIgnore] public string Desc { get; set; } // Patch's description
     [JsonIgnore] public MethodInfo? Entry { get; set; } // Method to execute on patch, if available
     [JsonIgnore] public bool Enabled { get; set; } // Is the patch enabled or not.
+
+    [JsonIgnore] public string Hash { get; set; } // SHA-256 of the patch assembly file, lowercase hex
+    [JsonIgnore] public PatchVerdict Verdict { get; } // Verdict from the safety catalog for this patch's hash
+    [JsonIgnore] public bool Allowed { get; } // May this patch be enabled under the current safety level
 }

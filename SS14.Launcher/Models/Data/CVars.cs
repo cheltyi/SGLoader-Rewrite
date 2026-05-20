@@ -119,6 +119,25 @@ public static class CVars
     /// </summary>
     public static readonly CVarDef<int> MarseyHide = CVarDef.Create("HideLevel", 2);
 
+    /// <summary>
+    /// Patch Safety Level: 0 = Block, 1 = Warn, 2 = Pass.
+    /// </summary>
+    public static readonly CVarDef<int> PatchSafetyLevel = CVarDef.Create("PatchSafetyLevel", 1);
+
+    /// <summary>
+    /// URL of the approved (validated) patch hash list.
+    /// GitHub web URLs (github.com/.../blob/...) are normalized to raw URLs automatically.
+    /// </summary>
+    public static readonly CVarDef<string> PatchValidatedUrl =
+        CVarDef.Create("PatchValidatedUrl", "https://raw.githubusercontent.com/AZERBAIJAN-TECH/patch-validation/main/validated.json");
+
+    /// <summary>
+    /// URL of the blocked (rejected) patch hash list.
+    /// GitHub web URLs (github.com/.../blob/...) are normalized to raw URLs automatically.
+    /// </summary>
+    public static readonly CVarDef<string> PatchRejectedUrl =
+        CVarDef.Create("PatchRejectedUrl", "https://raw.githubusercontent.com/AZERBAIJAN-TECH/patch-validation/main/rejected.json");
+
     // Logging
 
     /// <summary>

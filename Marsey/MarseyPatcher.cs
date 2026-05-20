@@ -12,6 +12,7 @@ using Marsey.Game.Resources;
 using Marsey.Game.Resources.Dumper;
 using Marsey.PatchAssembly;
 using Marsey.Patches;
+using Marsey.Safety;
 using Marsey.Stealthsey;
 using Marsey.Subversion;
 using Marsey.Misc;
@@ -67,6 +68,9 @@ public class MarseyPatcher
         // Initialize loader
         //Utility.SetupFlags();
         Utility.ReadConf();
+
+        // Read the patch safety catalog live from the repository so the safety gate can verify patches.
+        SafetyCatalog.LoadFromUrl(MarseyConf.PatchValidatedUrl, MarseyConf.PatchRejectedUrl);
 
         HarmonyManager.Init(new Harmony(MarseyVars.Identifier));
 
@@ -130,8 +134,16 @@ public class MarseyPatcher
 
     private void ExecPatcher()
     {
+        // Read enabled marseypatch paths sent by the launcher
+        List<string> files = FileHandler.GetFilesFromPipe("MarseyPatchesPipe");
+
+        // Safety gate: terminate before loading anything the safety level forbids
+        SafetyGate.EnforceFiles(files);
+
         // Prepare marseypatches
-        FileHandler.LoadAssemblies(pipe: true);
+        foreach (string file in files)
+            FileHandler.LoadExactAssembly(file, lockup: true);
+
         List<MarseyPatch> patches = Marsyfier.GetMarseyPatches();
 
         if (patches.Count != 0)

@@ -14,16 +14,23 @@ public static class PatchListManager
     private static readonly List<IPatch> _patches = new List<IPatch>();
 
     /// <summary>
-    /// Checks if the amount of patches in folder equals the amount of patches in list.
-    /// If not - resets the lists.
+    /// Drops patches whose assembly file is no longer among the given files, so a renamed
+    /// or deleted patch stops showing up in the list.
     /// </summary>
-    public static void RecheckPatches()
+    /// <param name="currentFiles">The patch files currently present in the folder.</param>
+    public static void SyncToFolder(ICollection<string> currentFiles)
     {
-        int folderPatchCount = FileHandler.GetPatches(new[] { MarseyVars.MarseyPatchFolder }).Count;
-        if (folderPatchCount != _patches.Count)
-        {
-            ResetList();
-        }
+        int removed = _patches.RemoveAll(p => !currentFiles.Contains(p.Asmpath));
+        if (removed > 0)
+            MarseyLogger.Log(MarseyLogger.LogType.DEBG, $"Removed {removed} patch(es) no longer present in the folder.");
+    }
+
+    /// <summary>
+    /// Whether a patch loaded from the given assembly path is already in the list.
+    /// </summary>
+    public static bool HasPatch(string asmpath)
+    {
+        return _patches.Any(p => p.Asmpath == asmpath);
     }
 
     /// <summary>

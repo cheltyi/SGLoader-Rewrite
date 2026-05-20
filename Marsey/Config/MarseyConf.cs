@@ -1,6 +1,7 @@
 using Marsey.Game.Patches;
 using Marsey.Game.Patches.Marseyports;
 using Marsey.Misc;
+using Marsey.Safety;
 using Marsey.Stealthsey;
 
 namespace Marsey.Config;
@@ -14,6 +15,21 @@ public static class MarseyConf
     /// Defines how strict is Hidesey
     /// </summary>
     public static HideLevel MarseyHide = HideLevel.Normal;
+
+    /// <summary>
+    /// How strictly patches are checked against the safety catalog.
+    /// </summary>
+    public static PatchSafetyLevel PatchSafety = PatchSafetyLevel.Warn;
+
+    /// <summary>
+    /// URL of the approved (validated) patch hash list.
+    /// </summary>
+    public static string PatchValidatedUrl = "";
+
+    /// <summary>
+    /// URL of the blocked (rejected) patch hash list.
+    /// </summary>
+    public static string PatchRejectedUrl = "";
 
     /// <summary>
     /// Log patcher output to separate file
@@ -109,6 +125,14 @@ public static class MarseyConf
         { "MARSEY_FORKID", MarseyPortMan.SetForkID },
         { "MARSEY_ENGINE", MarseyPortMan.SetEngineVer },
         { "MARSEY_HIDE_LEVEL", value => MarseyHide = (HideLevel)Enum.Parse(typeof(HideLevel), value) },
+        { "MARSEY_PATCH_SAFETY", value =>
+            {
+                if (Enum.TryParse(value, out PatchSafetyLevel level) && Enum.IsDefined(level))
+                    PatchSafety = level;
+            }
+        },
+        { "MARSEY_PATCH_VALIDATED", value => PatchValidatedUrl = value },
+        { "MARSEY_PATCH_REJECTED", value => PatchRejectedUrl = value },
         { "MARSEY_PATCHLESS", value => Patchless = value == "true"}
     };
 

@@ -1,11 +1,15 @@
+using System;
+using System.ComponentModel;
 using System.Reflection;
+using Marsey.Config;
+using Marsey.Safety;
 
 namespace Marsey.Patches;
 
 /// <summary>
 /// This class contains the data about a patch (called a Marsey), that is later used the loader to alter the game's functionality.
 /// </summary>
-public class MarseyPatch : IPatch
+public class MarseyPatch : IPatch, INotifyPropertyChanged
 {
     public string Asmpath { get; set; } // DLL file path
     public Assembly Asm { get; set; } // Assembly containing the patch
@@ -13,7 +17,27 @@ public class MarseyPatch : IPatch
     public string Desc { get; set; } // Patch's description
     public MethodInfo? Entry { get; set; } // Method to execute on patch, if available
     public bool Preload { get; set; } = false; // Is the patch getting loaded before game assemblies
-    public bool Enabled { get; set; } // Is the patch enabled or not.
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private bool _enabled;
+    public bool Enabled
+    {
+        get => _enabled;
+        // A patch the safety level forbids can never be turned on, not even
+        // programmatically (e.g. when restoring the saved patch list).
+        set
+        {
+            bool newValue = value && Allowed;
+            if (_enabled == newValue) return;
+            _enabled = newValue;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Enabled)));
+        }
+    }
+
+    public string Hash { get; set; } = ""; // SHA-256 of the patch assembly file
+    public PatchVerdict Verdict => SafetyCatalog.GetVerdict(Hash);
+    public bool Allowed => PatchAssessor.IsAllowed(Verdict, MarseyConf.PatchSafety);
 
     public MarseyPatch(string asmpath, Assembly asm, string name, string desc, bool preload = false)
     {
@@ -32,4 +56,6 @@ public class MarseyPatch : IPatch
         }
         return false;
     }
+
+    public override int GetHashCode() => HashCode.Combine(Name, Desc);
 }

@@ -81,15 +81,20 @@ public static async Task PrepareMods(string[]? path = null)
     {
         path ??= new[] { MarseyVars.MarseyPatchFolder };
 
+        List<string> files = pipe ? GetFilesFromPipe(pipename) : GetPatches(path);
+
         if (!pipe)
         {
-            PatchListManager.RecheckPatches();
+            // Reconcile the patch list with the folder: drop entries whose file was
+            // removed or renamed away, so stale patches stop appearing in the list.
+            PatchListManager.SyncToFolder(files);
         }
-
-        List<string> files = pipe ? GetFilesFromPipe(pipename) : GetPatches(path);
 
         foreach (string file in files)
         {
+            if (!pipe && PatchListManager.HasPatch(file))
+                continue; // Already loaded - assemblies can't be unloaded, don't load it twice.
+
             MarseyLogger.Log(MarseyLogger.LogType.DEBG, $"Loading assembly from {file}");
             LoadExactAssembly(file, pipe);
         }

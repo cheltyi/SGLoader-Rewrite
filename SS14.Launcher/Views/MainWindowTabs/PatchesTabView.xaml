@@ -10,6 +10,10 @@
   <UserControl.Resources>
     <global:PathToFileNameConverter x:Key="PathToFileNameConverter"/>
     <global:BooleanToPreloadConverter x:Key="BooleanToPreloadConverter"/>
+    <global:BooleanToOnOffConverter x:Key="BooleanToOnOffConverter"/>
+    <global:VerdictToIconGeometryConverter x:Key="VerdictToIconGeometryConverter"/>
+    <global:VerdictToIconBrushConverter x:Key="VerdictToIconBrushConverter"/>
+    <global:VerdictToTooltipConverter x:Key="VerdictToTooltipConverter"/>
   </UserControl.Resources>
 
   <Design.DataContext>
@@ -26,27 +30,38 @@
               <Separator/>
 
               <ItemsControl ItemsSource="{Binding MarseyPatches}" Name="MarseyPatchList">
-                <ItemsControl.ItemsPanel>
-                  <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
-                  </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                   <DataTemplate>
-                    <Grid Width="200" Margin="5">
-                      <ToggleButton
-                                    Command="{Binding DataContext.EnableRefreshCommand, ElementName=MarseyPatchList, FallbackValue={x:Null}}"
-                                    IsChecked="{Binding Enabled}"
-                                    Content="{Binding Name}">
-                        <ToolTip.Tip>
-                          <StackPanel>
-                            <TextBlock Text="{Binding Desc}" />
-                            <TextBlock Text="{Binding Asmpath, Converter={StaticResource PathToFileNameConverter}}" Foreground="Gray"/>
-                            <TextBlock Text="{Binding Preload, Converter={StaticResource BooleanToPreloadConverter}}" IsVisible="{Binding Preload}"/>
+                    <Border BorderBrush="#22FFFFFF" BorderThickness="0,0,0,1" Padding="6,8" Margin="2,0">
+                      <Grid ColumnDefinitions="Auto,*,Auto">
+                        <!-- Status icon: green check (approved), amber bang (unknown), red cross (rejected) -->
+                        <Path Grid.Column="0" Width="18" Height="18" Margin="4,2,12,0" VerticalAlignment="Top"
+                              Stretch="Uniform"
+                              Data="{Binding Verdict, Converter={StaticResource VerdictToIconGeometryConverter}}"
+                              Fill="{Binding Verdict, Converter={StaticResource VerdictToIconBrushConverter}}"
+                              ToolTip.Tip="{Binding Verdict, Converter={StaticResource VerdictToTooltipConverter}}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                          <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            <TextBlock Text="{Binding Preload, Converter={StaticResource BooleanToPreloadConverter}}"
+                                       Foreground="Gray" Margin="6,0,0,0" IsVisible="{Binding Preload}" />
+                            <TextBlock Text="blocked" Foreground="#F44336" FontWeight="Bold" Margin="6,0,0,0"
+                                       IsVisible="{Binding !Allowed}" />
                           </StackPanel>
-                        </ToolTip.Tip>
-                      </ToggleButton>
-                    </Grid>
+                          <TextBlock Text="{Binding Desc}" Foreground="Gray" TextWrapping="Wrap" />
+                          <TextBlock Text="{Binding Asmpath, Converter={StaticResource PathToFileNameConverter}}"
+                                     Foreground="#777777" FontSize="11" />
+                          <!-- SHA-256 of the patch file; selectable so it can be copied into the repo lists. -->
+                          <SelectableTextBlock Text="{Binding Hash}" Foreground="#666666" FontSize="10"
+                                               TextWrapping="Wrap" ToolTip.Tip="SHA-256 of this patch file" />
+                        </StackPanel>
+                        <ToggleButton Grid.Column="2" VerticalAlignment="Center" MinWidth="64" Margin="8,0,4,0"
+                                      IsEnabled="{Binding Allowed}"
+                                      IsChecked="{Binding Enabled}"
+                                      Content="{Binding Enabled, Converter={StaticResource BooleanToOnOffConverter}}"
+                                      Command="{Binding DataContext.EnableRefreshCommand, ElementName=MarseyPatchList, FallbackValue={x:Null}}" />
+                      </Grid>
+                    </Border>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
@@ -61,26 +76,36 @@
               <Separator/>
 
               <ItemsControl ItemsSource="{Binding SubverterPatches}" Name="SubverterPatchList">
-                <ItemsControl.ItemsPanel>
-                  <ItemsPanelTemplate>
-                    <WrapPanel Orientation="Horizontal" />
-                  </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                   <DataTemplate>
-                    <Grid Width="200" Margin="5">
-                      <ToggleButton
-                                    Command="{Binding DataContext.EnableRefreshCommand, ElementName=SubverterPatchList, FallbackValue={x:Null}}"
-                                    IsChecked="{Binding Enabled}"
-                                    Content="{Binding Name}">
-                        <ToolTip.Tip>
-                          <StackPanel>
-                            <TextBlock Text="{Binding Desc}" />
-                            <TextBlock Text="{Binding Asmpath, Converter={StaticResource PathToFileNameConverter}}" Foreground="Gray"/>
+                    <Border BorderBrush="#22FFFFFF" BorderThickness="0,0,0,1" Padding="6,8" Margin="2,0">
+                      <Grid ColumnDefinitions="Auto,*,Auto">
+                        <!-- Status icon: green check (approved), amber bang (unknown), red cross (rejected) -->
+                        <Path Grid.Column="0" Width="18" Height="18" Margin="4,2,12,0" VerticalAlignment="Top"
+                              Stretch="Uniform"
+                              Data="{Binding Verdict, Converter={StaticResource VerdictToIconGeometryConverter}}"
+                              Fill="{Binding Verdict, Converter={StaticResource VerdictToIconBrushConverter}}"
+                              ToolTip.Tip="{Binding Verdict, Converter={StaticResource VerdictToTooltipConverter}}" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                          <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                            <TextBlock Text="blocked" Foreground="#F44336" FontWeight="Bold" Margin="6,0,0,0"
+                                       IsVisible="{Binding !Allowed}" />
                           </StackPanel>
-                        </ToolTip.Tip>
-                      </ToggleButton>
-                    </Grid>
+                          <TextBlock Text="{Binding Desc}" Foreground="Gray" TextWrapping="Wrap" />
+                          <TextBlock Text="{Binding Asmpath, Converter={StaticResource PathToFileNameConverter}}"
+                                     Foreground="#777777" FontSize="11" />
+                          <!-- SHA-256 of the patch file; selectable so it can be copied into the repo lists. -->
+                          <SelectableTextBlock Text="{Binding Hash}" Foreground="#666666" FontSize="10"
+                                               TextWrapping="Wrap" ToolTip.Tip="SHA-256 of this patch file" />
+                        </StackPanel>
+                        <ToggleButton Grid.Column="2" VerticalAlignment="Center" MinWidth="64" Margin="8,0,4,0"
+                                      IsEnabled="{Binding Allowed}"
+                                      IsChecked="{Binding Enabled}"
+                                      Content="{Binding Enabled, Converter={StaticResource BooleanToOnOffConverter}}"
+                                      Command="{Binding DataContext.EnableRefreshCommand, ElementName=SubverterPatchList, FallbackValue={x:Null}}" />
+                      </Grid>
+                    </Border>
                   </DataTemplate>
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
@@ -133,4 +158,3 @@
     </Grid>
   </ScrollViewer>
 </UserControl>
-

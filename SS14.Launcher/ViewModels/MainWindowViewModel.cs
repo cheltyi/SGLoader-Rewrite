@@ -12,6 +12,7 @@ using Marsey;
 using Marsey.API;
 using Marsey.Config;
 using Marsey.Game.Managers;
+using Marsey.Safety;
 using Marsey.Stealthsey;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -60,6 +61,10 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
 
         HarmonyManager.Init(new Harmony(MarseyVars.Identifier));
         Hidesey.Initialize();
+
+        // Patch safety: sync the level before the patches tab builds. The catalog itself is
+        // read live from the repository when the patches tab is opened or refreshed.
+        MarseyConf.PatchSafety = (PatchSafetyLevel)_cfg.GetCVar(CVars.PatchSafetyLevel);
 
         ServersTab = new ServerListTabViewModel(this);
         HomeTab = new HomePageViewModel(this);
@@ -160,6 +165,8 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
     {
         BusyTask = "Checking MarseyApi";
         await MarseyApi.Initialize(_cfg.GetCVar(CVars.MarseyApiEndpoint), _cfg.GetCVar(CVars.MarseyApi));
+        BusyTask = "Reading patch safety catalog...";
+        await PatchesTab.RefreshCatalogAsync();
         BusyTask = "Checking for launcher update...";
         CheckLauncherUpdate();
         BusyTask = "Refreshing login status...";

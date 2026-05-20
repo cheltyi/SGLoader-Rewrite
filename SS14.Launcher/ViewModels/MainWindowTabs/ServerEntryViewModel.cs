@@ -96,6 +96,13 @@ public sealed class ServerEntryViewModel : ObservableRecipient, IRecipient<Favor
         }
     }
 
+    /// <summary>UTC time the current round started, or null if not in a round / unknown.</summary>
+    public DateTime? RoundStartTime => _cacheData.RoundStartTime;
+
+    /// <summary>Non-empty ("Lobby") when the server is between rounds; empty while a round is running.</summary>
+    public string RoundStatusString =>
+        _cacheData.RoundStatus == GameRoundStatus.InLobby ? "Lobby" : "";
+
     public string Description
     {
         get
@@ -211,6 +218,14 @@ public sealed class ServerEntryViewModel : ObservableRecipient, IRecipient<Favor
             case nameof(IServerStatusData.PlayerCount):
             case nameof(IServerStatusData.SoftMaxPlayerCount):
                 OnPropertyChanged(nameof(ServerStatusString));
+                break;
+
+            case nameof(IServerStatusData.RoundStartTime):
+                OnPropertyChanged(nameof(RoundStartTime));
+                break;
+
+            case nameof(IServerStatusData.RoundStatus):
+                OnPropertyChanged(nameof(RoundStatusString));
                 break;
 
             case nameof(IServerStatusData.Status):

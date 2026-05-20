@@ -57,11 +57,6 @@ public static class HappyEyeballsHttp
     /// </summary>
     private static bool _useIPv6 = Socket.OSSupportsIPv6;
 
-    /// <summary>
-    /// Whether the initial IPv6 check has been performed (to determine whether v6 is available or not).
-    /// </summary>
-    private static bool _hasResolvedIPv6Availability;
-
     private const int FirstTryTimeout = 2000;
 
     private static async ValueTask<Stream> OnConnect(
@@ -170,7 +165,7 @@ public static class HappyEyeballsHttp
         }
         else if (ipv6.Length > ipv4.Length)
         {
-            ipv4.AsSpan(commonLength).CopyTo(result.AsSpan(commonLength * 2));
+            ipv6.AsSpan(commonLength).CopyTo(result.AsSpan(commonLength * 2));
         }
 
         return result;

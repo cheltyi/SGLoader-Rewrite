@@ -83,8 +83,8 @@ namespace SS14.Launcher.ViewModels.MainWindowTabs
 
         /// <summary>
         /// Reads the safety catalog live from the configured URLs, then refreshes verdicts.
-        /// Called on launcher startup, when the patches tab is opened and on "Recheck mods".
-        /// Re-entrant calls (e.g. a startup fetch overlapping a tab switch) are ignored.
+        /// Called when the patches tab is opened and on "Recheck mods".
+        /// Re-entrant calls (e.g. overlapping tab switches) are ignored.
         /// </summary>
         public async Task RefreshCatalogAsync()
         {

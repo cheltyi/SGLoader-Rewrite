@@ -29,10 +29,6 @@
     <Compile Update="Views\MainWindowTabs\ServerFilterView.xaml.cs">
       <DependentUpon>ServerFilterView.xaml</DependentUpon>
     </Compile>
-
-    <Compile Update="Views\MainWindowTabs\ToolsTabView.xaml.cs">
-      <DependentUpon>ToolsTabView.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia "/>

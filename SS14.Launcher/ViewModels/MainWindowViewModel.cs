@@ -32,7 +32,6 @@ namespace SS14.Launcher.ViewModels;
 
 public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
 {
-    private readonly AuthApi _authApi;
     private readonly DataManager _cfg;
     private readonly LoginManager _loginMgr;
     private readonly HttpClient _http;
@@ -49,15 +48,12 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
     public PatchesTabViewModel PatchesTab { get; }
     public OptionsTabViewModel OptionsTab { get; }
 
-    public ToolsTabViewModel ToolsTab { get; }
-
     public MainWindowViewModel()
     {
         _cfg = Locator.Current.GetRequiredService<DataManager>();
         _loginMgr = Locator.Current.GetRequiredService<LoginManager>();
         _http = Locator.Current.GetRequiredService<HttpClient>();
         _infoManager = Locator.Current.GetRequiredService<LauncherInfoManager>();
-        _authApi = Locator.Current.GetRequiredService<AuthApi>();
 
         HarmonyManager.Init(new Harmony(MarseyVars.Identifier));
         Hidesey.Initialize();
@@ -70,14 +66,12 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
         HomeTab = new HomePageViewModel(this);
         PatchesTab = new PatchesTabViewModel();
         OptionsTab = new OptionsTabViewModel();
-        ToolsTab = new ToolsTabViewModel(_authApi);
 
         var tabs = new List<MainWindowTabViewModel>();
         tabs.Add(HomeTab);
         tabs.Add(ServersTab);
         tabs.Add(PatchesTab);
         tabs.Add(OptionsTab);
-        tabs.Add(ToolsTab);
 #if DEVELOPMENT
         tabs.Add(new DevelopmentTabViewModel());
 #endif
@@ -165,8 +159,8 @@ public sealed class MainWindowViewModel : ViewModelBase, IErrorOverlayOwner
     {
         BusyTask = "Checking MarseyApi";
         await MarseyApi.Initialize(_cfg.GetCVar(CVars.MarseyApiEndpoint), _cfg.GetCVar(CVars.MarseyApi));
-        BusyTask = "Reading patch safety catalog...";
-        await PatchesTab.RefreshCatalogAsync();
+        // The safety catalog is fetched live when the Plugins tab is opened (PatchesTabViewModel.Selected),
+        // so it is not fetched here - that network round-trip used to stall launcher startup.
         BusyTask = "Checking for launcher update...";
         CheckLauncherUpdate();
         BusyTask = "Refreshing login status...";

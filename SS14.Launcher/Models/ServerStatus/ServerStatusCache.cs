@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Net.Sockets;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -103,7 +105,7 @@ public sealed class ServerStatusCache : IServerSource
 
                 cancel.ThrowIfCancellationRequested();
             }
-            catch (Exception e) when (e is JsonException or HttpRequestException or InvalidDataException)
+            catch (Exception e) when (e is JsonException or HttpRequestException or InvalidDataException or IOException or SocketException)
             {
                 data.Status = ServerStatusCode.Offline;
                 return;
@@ -121,8 +123,27 @@ public sealed class ServerStatusCache : IServerSource
     {
         data.Status = ServerStatusCode.Online;
         data.Name = status.Name;
-        data.PlayerCount = status.PlayerCount;
-        data.SoftMaxPlayerCount = status.SoftMaxPlayerCount;
+        data.PlayerCount = Math.Max(0, status.PlayerCount);
+        data.SoftMaxPlayerCount = Math.Max(0, status.SoftMaxPlayerCount);
+
+        data.RoundStatus = status.RunLevel switch
+        {
+            ServerApi.GameRunLevel.InRound => GameRoundStatus.InRound,
+            ServerApi.GameRunLevel.PreRoundLobby or ServerApi.GameRunLevel.PostRound => GameRoundStatus.InLobby,
+            _ => GameRoundStatus.Unknown,
+        };
+
+        // Parse defensively: a server is free to report a garbage timestamp and that must not crash the launcher.
+        if (status.RoundStartTime != null
+            && DateTime.TryParse(status.RoundStartTime, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind,
+                out var roundStart))
+        {
+            data.RoundStartTime = roundStart;
+        }
+        else
+        {
+            data.RoundStartTime = null;
+        }
 
         var baseTags = status.Tags ?? Array.Empty<string>();
         var inferredTags = ServerTagInfer.InferTags(status);

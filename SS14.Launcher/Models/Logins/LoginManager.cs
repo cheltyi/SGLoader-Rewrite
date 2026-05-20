@@ -132,7 +132,10 @@ public sealed class LoginManager : ReactiveObject
     {
         Log.Debug("Refreshing all tokens.");
 
-        await Task.WhenAll(_logins.Items.Select(async l =>
+        const int delayStart = 2;
+        const int delayValue = 200;
+
+        await Task.WhenAll(_logins.Items.Select(async (l, i) =>
         {
             if (l.Status == AccountLoginStatus.Expired)
             {
@@ -148,6 +151,10 @@ public sealed class LoginManager : ReactiveObject
                 l.SetStatus(AccountLoginStatus.Expired);
                 return;
             }
+
+            // Stagger refresh calls slightly so we don't hammer the auth server when many accounts are signed in.
+            if (i > delayStart)
+                await Task.Delay(delayValue * (i - delayStart));
 
             try
             {

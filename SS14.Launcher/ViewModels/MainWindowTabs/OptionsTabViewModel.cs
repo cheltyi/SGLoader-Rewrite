@@ -69,6 +69,7 @@ public class OptionsTabViewModel : MainWindowTabViewModel, INotifyPropertyChange
 
         _patchValidatedUrl = Cfg.GetCVar(CVars.PatchValidatedUrl);
         _patchRejectedUrl = Cfg.GetCVar(CVars.PatchRejectedUrl);
+        _RPCUsername = Cfg.GetCVar(CVars.RPCUsername);
 
         Persist.UpdateLauncherConfig();
         SetTempHwid();
@@ -316,15 +317,13 @@ public class OptionsTabViewModel : MainWindowTabViewModel, INotifyPropertyChange
         }
     }
 
+    // Edit is stashed and only written when SetRPCUsernameCommand runs, to avoid
+    // committing the config on every keystroke.
     private string _RPCUsername = "";
     public string RPCUsername
     {
         get => Cfg.GetCVar(CVars.RPCUsername);
-        set
-        {
-            Cfg.SetCVar(CVars.RPCUsername, value);
-            Cfg.CommitConfig();
-        }
+        set => _RPCUsername = value;
     }
 
     public bool ForcingHWID
@@ -525,8 +524,9 @@ public class OptionsTabViewModel : MainWindowTabViewModel, INotifyPropertyChange
 
     private void OnSetRPCUsernameClick()
     {
-        Cfg.SetCVar(CVars.RPCUsername, RPCUsername);
+        Cfg.SetCVar(CVars.RPCUsername, _RPCUsername);
         Cfg.CommitConfig();
+        OnPropertyChanged(nameof(RPCUsername));
     }
 
     private void OnGenHWIdClick()

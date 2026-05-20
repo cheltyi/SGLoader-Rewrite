@@ -27,7 +27,6 @@ public class MarseyPatcher
 {
     private static MarseyPatcher? _instance;
     private static ManualResetEvent? _flag;
-    private static bool _patchingDisabled;
     private static bool _enabled;
 
     public static MarseyPatcher Instance
@@ -114,9 +113,6 @@ public class MarseyPatcher
     /// </summary>
     public void Boot()
     {
-        if (_patchingDisabled)
-            return;
-
         // Side-load custom code
         if (Subverse.CheckSubversions())
             Subverse.PatchSubverter();

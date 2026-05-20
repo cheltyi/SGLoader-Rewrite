@@ -79,7 +79,8 @@
     <ContentControl Classes="OverlayBox" IsVisible="{Binding LoginViewModel.Screen.Busy}">
       <StackPanel Orientation="Vertical" VerticalAlignment="Center">
         <Viewbox Classes="DungSpinnerBox">
-          <v:DungSpinner />
+          <!-- IsVisible must be set so the spinner animation stops when hidden (idle CPU). -->
+          <v:DungSpinner IsVisible="{Binding LoginViewModel.Screen.Busy}" />
         </Viewbox>
         <TextBlock Text="{Binding LoginViewModel.Screen.BusyText}" HorizontalAlignment="Center" />
       </StackPanel>
@@ -93,7 +94,8 @@
     <ContentControl Classes="OverlayBox" IsVisible="{Binding BusyTask,Converter={x:Static ObjectConverters.IsNotNull}}">
       <StackPanel Orientation="Vertical">
         <Viewbox Classes="DungSpinnerBox">
-          <v:DungSpinner DockPanel.Dock="Top" />
+          <!-- IsVisible must be set so the spinner animation stops when hidden (idle CPU). -->
+          <v:DungSpinner DockPanel.Dock="Top" IsVisible="{Binding BusyTask,Converter={x:Static ObjectConverters.IsNotNull}}" />
         </Viewbox>
         <TextBlock Text="{Binding BusyTask}" HorizontalAlignment="Center" />
       </StackPanel>

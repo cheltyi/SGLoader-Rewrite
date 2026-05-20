@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:mainWindowTabs="clr-namespace:SS14.Launcher.ViewModels.MainWindowTabs"
              xmlns:models="clr-namespace:SS14.Launcher.Models"
+             xmlns:controls="clr-namespace:SS14.Launcher.Controls"
              xmlns:views="clr-namespace:SS14.Launcher.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SS14.Launcher.Views.MainWindowTabs.ServerEntryView">
@@ -21,6 +22,15 @@
                      TextAlignment="Center" Text="{Binding ServerStatusString}"
                      MinWidth="80"
                      Margin="10, 0" />
+          <Rectangle DockPanel.Dock="Right" Classes="VerticalSeparator" />
+          <!-- Round time: shows the live timer mid-round, or "Lobby" between rounds. -->
+          <Panel DockPanel.Dock="Right" MinWidth="70" Margin="10, 0">
+            <controls:TimerTextCell Value="{Binding RoundStartTime}"
+                                    IsVisible="{Binding RoundStatusString, Converter={x:Static StringConverters.IsNullOrEmpty}}" />
+            <TextBlock Text="{Binding RoundStatusString}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       IsVisible="{Binding RoundStatusString, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </Panel>
           <Rectangle DockPanel.Dock="Right" Classes="VerticalSeparator" />
           <TextBlock VerticalAlignment="Center" Text="{Binding Name}" TextTrimming="CharacterEllipsis"/>
         </DockPanel>

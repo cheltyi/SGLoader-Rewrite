@@ -8,9 +8,10 @@ public sealed class ServerStatusData : ObservableObject, IServerStatusData
 {
     private string? _name;
     private string? _desc;
-    private TimeSpan? _ping;
     private int _playerCount;
     private int _softMaxPlayerCount;
+    private DateTime? _roundStartTime;
+    private GameRoundStatus _roundStatus;
     private ServerStatusCode _status = ServerStatusCode.FetchingStatus;
     private ServerStatusInfoCode _statusInfo = ServerStatusInfoCode.NotFetched;
     private ServerInfoLink[]? _links;
@@ -42,14 +43,6 @@ public sealed class ServerStatusData : ObservableObject, IServerStatusData
         set => SetProperty(ref _desc, value);
     }
 
-    // BUG: This ping stat is completely wrong currently.
-    // See the assignment in ServerStatusCache.cs for why.
-    public TimeSpan? Ping
-    {
-        get => _ping;
-        set => SetProperty(ref _ping, value);
-    }
-
     public ServerStatusCode Status
     {
         get => _status;
@@ -75,6 +68,18 @@ public sealed class ServerStatusData : ObservableObject, IServerStatusData
     {
         get => _softMaxPlayerCount;
         set => SetProperty(ref _softMaxPlayerCount, value);
+    }
+
+    public DateTime? RoundStartTime
+    {
+        get => _roundStartTime;
+        set => SetProperty(ref _roundStartTime, value);
+    }
+
+    public GameRoundStatus RoundStatus
+    {
+        get => _roundStatus;
+        set => SetProperty(ref _roundStatus, value);
     }
 
     public ServerInfoLink[]? Links
